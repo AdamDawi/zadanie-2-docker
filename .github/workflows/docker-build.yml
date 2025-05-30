@@ -56,12 +56,12 @@ jobs:
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
           tags: ${{ steps.meta.outputs.tags }}
 
-      - name: Extract first image tag
-        id: tag
-        run: |
-          # Clean up the tags by removing newlines or extra spaces
-          tag=$(echo "${{ steps.meta.outputs.tags }}" | tr -d '\n' | cut -d',' -f1)
-          echo "tag=$tag" >> $GITHUB_OUTPUT
+      # - name: Extract first image tag
+      #   id: tag
+      #   run: |
+      #     # Clean up the tags by removing newlines or extra spaces
+      #     tag=$(echo "${{ steps.meta.outputs.tags }}" | tr -d '\n' | cut -d',' -f1)
+      #     echo "tag=$tag" >> $GITHUB_OUTPUT
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
