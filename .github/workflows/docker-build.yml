@@ -51,22 +51,17 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           load: false
-          push: true
+          push: false
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
-          tags: ${{ steps.meta.outputs.tags }}
-
-      # - name: Extract first image tag
-      #   id: tag
-      #   run: |
-      #     # Clean up the tags by removing newlines or extra spaces
-      #     tag=$(echo "${{ steps.meta.outputs.tags }}" | tr -d '\n' | cut -d',' -f1)
-      #     echo "tag=$tag" >> $GITHUB_OUTPUT
+          tags: |
+            ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ${{ steps.meta.outputs.tags }}
+          image-ref: ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
           format: table
           exit-code: 1
           severity: CRITICAL,HIGH
@@ -81,4 +76,6 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
