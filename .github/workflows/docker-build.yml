@@ -43,7 +43,7 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build image with cache and push (without pushing yet)
+      - name: Build image with cache and push
         id: build-image
         uses: docker/build-push-action@v5
         with:
@@ -74,8 +74,8 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
-          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
+          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
+          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache,mode=max
           tags: |
             ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
             ghcr.io/adamdawi/zadanie-2-docker:latest
