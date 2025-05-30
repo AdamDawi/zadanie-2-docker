@@ -55,6 +55,11 @@ jobs:
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
           tags: ${{ steps.meta.outputs.tags }}
+          
+      - name: Extract first image tag
+        id: tag
+        run: |
+          echo "tag=$(echo '${{ steps.meta.outputs.tags }}' | cut -d',' -f1)" >> $GITHUB_OUTPUT
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
