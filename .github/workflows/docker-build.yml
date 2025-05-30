@@ -66,7 +66,7 @@ jobs:
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ${{ steps.meta.outputs.tag }}
+          image-ref: ${{ steps.meta.outputs.tags }}
           format: table
           exit-code: 1
           severity: CRITICAL,HIGH
