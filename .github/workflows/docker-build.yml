@@ -50,8 +50,8 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: false
-          load: true
+          load: false
+          push: true
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/example:cache,mode=max
           tags: ${{ steps.meta.outputs.tags }}
