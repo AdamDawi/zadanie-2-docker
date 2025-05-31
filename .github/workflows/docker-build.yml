@@ -11,6 +11,10 @@ jobs:
     name: Build, scan and push
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_CACHE: ${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
+      GHCR_IMAGE: ghcr.io/${{ vars.GH_USERNAME }}/zadanie-2-docker
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/adamdawi/zadanie-2-docker
+          images: ${{env.GHCR_IMAGE}}
           tags: |
             type=ref,event=tag
             type=sha
@@ -51,7 +55,7 @@ jobs:
           push: false
           load: true
           tags: ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
-          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
+          cache-from: type=registry,ref=${{env.IMAGE_CACHE}}
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
@@ -60,7 +64,7 @@ jobs:
           format: table
           exit-code: 1
           severity: CRITICAL,HIGH
-          skip-dirs: node_modules,/usr/local/lib/node_modules/npm/node_modules/cross-spawn # cross-spawn wyświetla się nawet po zmianie wersji, dlatego zostało wykluczone ze sprawdzenia
+          skip-dirs: /usr/local/lib/node_modules/npm/node_modules/cross-spawn # cross-spawn wyświetla się nawet po zmianie wersji, dlatego zostało wykluczone ze sprawdzenia
 
       - name: Push image (only if scan passed)
         if: success()
@@ -70,8 +74,8 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
-          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache,mode=max
+          cache-from: type=registry,ref=${{env.IMAGE_CACHE}}
+          cache-to: type=registry,ref=${{env.IMAGE_CACHE}},mode=max
           tags: |
             ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
             ghcr.io/adamdawi/zadanie-2-docker:latest
