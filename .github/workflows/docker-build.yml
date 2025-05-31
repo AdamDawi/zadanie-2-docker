@@ -43,19 +43,15 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build image with cache and push
-        id: build-image
+      - name: Build Docker image (local only for scan)
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
-          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache,mode=max
-          tags: |
-            ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
-            ghcr.io/adamdawi/zadanie-2-docker:latest
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
