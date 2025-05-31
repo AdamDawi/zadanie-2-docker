@@ -14,6 +14,7 @@ jobs:
     env:
       IMAGE_CACHE: ${{ vars.DOCKERHUB_USERNAME }}/zadanie-2-docker:cache
       GHCR_IMAGE: ghcr.io/${{ vars.GH_USERNAME }}/zadanie-2-docker
+      IMAGE_SHA_TAG: ghcr.io/${{ vars.GH_USERNAME }}/zadanie-2-docker:sha-${{ github.sha }}
 
     steps:
       - name: Checkout code
@@ -54,13 +55,13 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
-          tags: ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
+          tags: ${{env.IMAGE_SHA_TAG}}
           cache-from: type=registry,ref=${{env.IMAGE_CACHE}}
 
       - name: CVE scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
+          image-ref: ${{env.IMAGE_SHA_TAG}}
           format: table
           exit-code: 1
           severity: CRITICAL,HIGH
@@ -77,5 +78,5 @@ jobs:
           cache-from: type=registry,ref=${{env.IMAGE_CACHE}}
           cache-to: type=registry,ref=${{env.IMAGE_CACHE}},mode=max
           tags: |
-            ghcr.io/adamdawi/zadanie-2-docker:sha-${{ github.sha }}
+            ${{env.IMAGE_SHA_TAG}}
             ghcr.io/adamdawi/zadanie-2-docker:latest
