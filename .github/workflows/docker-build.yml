@@ -77,6 +77,4 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{env.IMAGE_CACHE}}
           cache-to: type=registry,ref=${{env.IMAGE_CACHE}},mode=max
-          tags: |
-            ${{env.IMAGE_SHA_TAG}}
-            ghcr.io/adamdawi/zadanie-2-docker:latest
+          tags: ${{ steps.meta.outputs.tags }}
