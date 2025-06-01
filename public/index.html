@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wybierz lokalizację</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<form class="weather-form" action="/weather" method="POST">
+    <h1>Wybierz kraj i miasto</h1>
+
+    <label for="country">Kraj:</label>
+    <select name="country" id="country" onchange="updateCities()">
+        <option value="Polska">Polska</option>
+        <option value="Niemcy">Niemcy</option>
+        <option value="Czechy">Czechy</option>
+    </select>
+
+    <label for="city">Miasto:</label>
+    <select name="city" id="city">
+        <option value="Warszawa">Warszawa</option>
+        <option value="Kraków">Kraków</option>
+        <option value="Gdańsk">Gdańsk</option>
+    </select>
+
+    <button type="submit">Pokaż pogodę</button>
+</form>
+
+<script>
+    const cities = {
+        "Polska": ["Warszawa", "Kraków", "Gdańsk"],
+        "Niemcy": ["Berlin", "Monachium", "Hamburg"],
+        "Czechy": ["Praga", "Brno", "Ostrawa"]
+    };
+
+    function updateCities() {
+        const countrySelect = document.getElementById('country');
+        const citySelect = document.getElementById('city');
+        const selectedCountry = countrySelect.value;
+
+        citySelect.innerHTML = '';
+
+        cities[selectedCountry].forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            citySelect.appendChild(option);
+        });
+    }
+</script>
+
+</body>
+
+</html>
