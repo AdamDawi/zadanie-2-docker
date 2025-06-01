@@ -154,7 +154,7 @@ Użycie Git commit SHA jako tagu gwarantuje, że każdy obraz będzie jednoznacz
 Cache w DockerHub:
 - Wykorzystanie dedykowanego obrazu cache (username/zadanie-2-docker:cache)
 
-![Image](https://github.com/user-attachments/assets/12df05e2-b6fd-46cc-8f0e-fcde900fcb2c)
+![Image](https://github.com/user-attachments/assets/9bb2f7f1-a5b5-456b-89f4-16f0d7e538f2)
 
 - Tryb `mode=max` dla pełnej optymalizacji
 - Cache współdzielony między różnymi architekturami
